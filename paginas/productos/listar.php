@@ -16,8 +16,9 @@ $productos = ProductoQuery::create()->find();
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Producto</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Propiedades</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estatus</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Descripcion</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stock</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Descripci&oacute;n</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Precio</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -49,7 +50,7 @@ $productos = ProductoQuery::create()->find();
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0"><?php echo $producto->getTalla();?></p>
-                        <p class="text-xs text-secondary mb-0"><?php echo $producto->getEstilo();?></p>
+                        <p class="text-xs text-secondary mb-0"><?php echo $producto->getEstilo();?> / <?php echo $producto->getGenero();?></p>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-<?php echo $mensaje?>">Disponible {<?php echo $producto->getStockActual();?>}</span>
@@ -57,11 +58,14 @@ $productos = ProductoQuery::create()->find();
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold"><?php echo $producto->getDescripcion() ?></span>
                       </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">$<?php echo $producto->getPrecio() ?></span>
+                      </td>
                       <td class="align-middle text-center text-sm">
-                        <a href="Fuser02.php?seccion=agregar_producto&accion=editar&id=<?php echo $producto->getIdProducto()?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit product">
+                        <a href="Fuser02.php?seccion=editar_producto&accion=editar&id=<?php echo $producto->getIdProducto()?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit product">
                           Editar
                         </a>
-                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete product">
+                        <a href="Fuser02.php?seccion=editar_producto&accion=eliminar&id=<?php echo $producto->getIdProducto()?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete product">
                           &nbsp; Eliminar
                         </a>
                       </td>

@@ -242,6 +242,7 @@ $productos = ProductoQuery::create()->find();
         }
         ?>
       </div>
+      
       <!-- Fin Contenido -->
 
       <!-- Pie de pagina -->
