@@ -1,10 +1,10 @@
 <?php
+session_start();
 include_once "propelinit.php";
 $clave = $_GET['id'];
 $productos = ProductoQuery::create()->findByIdProducto($clave);
 
-$direccion = DireccionQuery::create()->find();
-$usuario = UsuarioQuery::create()->find();
+
 
 foreach ($productos as $producto) {
     ?>
@@ -47,12 +47,12 @@ foreach ($productos as $producto) {
                             <form method="POST" action="comprarfn.php?id=<?php echo $producto->getIdProducto(); ?>">
                                 <div class="row row-space">
                                     <div class="col-2">
-                                        <img class="card-img-top" src="<?php echo $producto->getImagen(); ?>" alt="zzz" width="150" height="250">
+                                        <img class="card-img-top" src="<?php echo $producto->getImagen(); ?>" alt="zzz" width="170" height="250">
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label for="talla">Talla:</label>
-                                            <input  class="input--style-2" type="text" value="24" id="talla" name="talla" readonly><br>
+                                            <input  class="input--style-2" type="text" value="<?php echo $producto->getTalla(); ?>" id="talla" name="talla" readonly><br>
                                         </div>
                                         <div class="input-group">
                                             <label for="col">Color:</label>
@@ -68,35 +68,26 @@ foreach ($productos as $producto) {
                                 <h3>Metodo de Entrega</h3><br>
                                 <div class="input-group">
                                     <label for="est">Telefono: </label>
-                                    <input class="input--style-2" type="text" placeholder="num" name="tel">
+                                    <input class="input--style-2" type="text" value="<?php echo $_SESSION['telefono']; ?>" name="tel" readonly>
                                 </div>
                                 <div class="row row-space">
                                     <div class="col-2">
-                                        <div class="input-group">
-                                            <div class="rs-select2 js-select-simple select--no-search">
-                                                <select name="dir">
-                                                    <option disabled="disabled" selected="selected">Domicilio</option>
-                                                    <option>dir1</option>
-                                                    <option>dir2</option>
-                                                    <option>dir3</option>
-                                                </select>
-                                                <div class="select-dropdown"></div>
-                                            </div>
-                                        </div>
+                                        <label for="est">Direccion: </label>
+                                        <input class="input--style-2" type="text" value="<?php echo $_SESSION['dir']; ?>" name="dir" readonly>
                                     </div>
                                     <div class="col-2">
-                                        <button class="btn btn--radius btn--prlp">Agregar nuevo Domicilio</button>
+                                        <button class="btn btn--radius btn--prlp btn-sm" disabled="disabled">Agregar nuevo Domicilio</button>
                                     </div>
                                 </div>
                                 <br><br>
                                 <div class="row row-space">
                                     <div class="col-2">
                                         <h3>Metodo de Envio</h3><br>
+                                        <h5>Tipo de envio: </h5>
                                         <div class="input-group">
                                             <div class="rs-select2 js-select-simple select--no-search">
                                                 <select name="envio">
-                                                    <option disabled="disabled" selected="selected">Tipo de Envio</option>
-                                                    <option>Express</option>
+                                                    <option selected="selected">Express</option>
                                                     <option>Standar</option>
                                                 </select>
                                                 <div class="select-dropdown"></div>
@@ -105,11 +96,11 @@ foreach ($productos as $producto) {
                                     </div>
                                     <div class="col-2">
                                         <h3>Metodo de Pago</h3><br>
+                                        <h5>Como desea Pagar? </h5>
                                         <div class="input-group">
                                             <div class="rs-select2 js-select-simple select--no-search">
                                                 <select name="pago">
-                                                    <option disabled="disabled" selected="selected">Como desea Pagar?</option>
-                                                    <option>Transferencia-SPEI</option>
+                                                    <option selected="selected">Transferencia-SPEI</option>
                                                     <option>Efectivo(OXXO)</option>
                                                 </select>
                                                 <div class="select-dropdown"></div>

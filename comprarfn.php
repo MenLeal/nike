@@ -1,9 +1,8 @@
 <?php
+session_start();
 include_once "propelinit.php";
 $clave = $_GET['id'];
 $productos = ProductoQuery::create()->findByIdProducto($clave);
-$direccion = DireccionQuery::create()->find();
-$usuario = UsuarioQuery::create()->find();
 
 $envio=$_POST['envio'];
 $pago=$_POST['pago'];
@@ -26,6 +25,29 @@ if($pago=="Transferencia-SPEI"){
 }
 if($pago=="Efectivo(OXXO)"){
     $ref="9700-0100-0157-4293";
+}
+
+$compra = CompraQuery::create()->find();
+$com = new Compra();
+$com->setIdUsuario($_SESSION['id']);
+$com->setIdProducto($producto->getIdProducto());
+$com->setEstatus("Pendiente");
+$hoy = date("Y-m-d");
+$com->setFecha($hoy);
+
+$mensaje ="";
+if($com->validate()){
+    $com->save();
+    $mensaje="Se guardó";
+    #$message = "siu";
+    #echo "<script type='text/javascript'>alert('$message');</script>";
+    #sleep(3);
+    #header("Location: comprar.php?id=".$idp.'');
+}
+else{
+    foreach($com->getValidationFailures() as $error){
+        $mensaje.="<br>".$error->getMessage();
+    }
 }
 
 ?>

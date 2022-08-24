@@ -14,6 +14,12 @@ if ($usuario != "") {
         $_SESSION["nombres"] = $usuario->getNombres();
         $_SESSION["apellidop"] = $usuario->getApellidoPaterno();
         $_SESSION["apellidom"] = $usuario->getApellidoMaterno();
+        $_SESSION["telefono"] = $usuario->getTelefono();
+        $direccion = DireccionQuery::create()->filterByIdUsuario($usuario->getIdUsuario())->findOne();
+        $_SESSION["dir"] = $direccion->getCompleto();
+        $favoritos = FavoritosQuery::create()->filterByIdUsuario($usuario->getIdUsuario())->findOne();
+        $_SESSION["fav"] = $favoritos->getIdProducto();
+
         if ($usuario->getTipo() == "Admin") {
             header("Location: Fuser02.php");
         } else {

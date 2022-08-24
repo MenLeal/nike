@@ -30,7 +30,7 @@ $productos = ProductoQuery::create()->find();
               <img src="img/icon_nike_bar.png" height="80px" width="150px">
             </a>
             <form class="form-inline" method="post" action="navbar.php">
-              <input class="form-control" name="busc" type="text" size="50" placeholder="Buscar...">
+              <input class="form-control" name="busc" type="text" size="40" placeholder="Buscar...">
               <button type="submit" class="btn btn-light" role="button">
                 <img src="img/iconike.png" width="32" height="28" style="vertical-align: middle"><br>
               </button>
@@ -42,6 +42,13 @@ $productos = ProductoQuery::create()->find();
               echo "</a>";
             } else {
               echo  "<label class='nav-brand'>" . "Bienvenido, " . $_SESSION['nombres'] . "</label>";
+              ?>
+              <a href="verfav.php">
+                <button class="btn btn-outline-info flex-shrink-0" type="button">
+                    <img src="img/heart.png" width="35" height="30" style="vertical-align: middle">
+                </button>
+              </a>
+              <?php
               echo "<a class='nav-brand' href='logout.php'>";
               echo "<img src='img/logout.png' width='32' height='28' style='vertical-align: middle' >";
               echo "</a>";
@@ -242,7 +249,6 @@ $productos = ProductoQuery::create()->find();
         }
         ?>
       </div>
-      
       <!-- Fin Contenido -->
 
       <!-- Pie de pagina -->

@@ -15,6 +15,7 @@ if($accion=="eliminar"){
       }
 }
 if ($accion == "editar" && $id != "") {
+    $_SESSION["idProd"] = $id;
     @$addfilled = "is-filled";
     @$nombreProducto = $producto->getNombreProducto();
     @$modeloProducto = $producto->getModelo();
@@ -26,6 +27,7 @@ if ($accion == "editar" && $id != "") {
     @$stockProducto = $producto->getStockOriginal();
     @$descripProducto = $producto->getDescripcion();
     @$imgProducto = $producto->getImagen();
+    $_SESSION['imgRuta']= $producto->getImagen();
     $diagonal = strpos($imgProducto,"/");
     $nombreImg = substr($imgProducto,5,$diagonal);
     switch ($generoProducto) {
@@ -60,6 +62,81 @@ if ($accion == "editar" && $id != "") {
             break;
     }
 }
+if ($accion == "actulizar"){
+    $nom = $_POST['nombreImg'];
+    @$nombreProducto = $_POST['txtNombreProd'];
+    @$modeloProducto = $_POST['txtModelo'];
+    @$colorProducto = $_POST['txtColor'];
+    @$tallaProducto = $_POST['txtTalla'];
+    @$precioProducto = $_POST['txtPrecio'];
+    @$stockProducto = $_POST['txtStock'];
+    @$descripProducto = $_POST['txtDescrip'];
+    $addfilled = "is-filled";
+    if (isset($_FILES['img']) && $nom != "") {
+        $ruta = $_FILES['img']['tmp_name'];
+        $tipo = $_FILES['img']['type'];
+        $img_info = getimagesize($_FILES['img']['tmp_name']);
+        $ancho = $img_info[0];
+        $largo = $img_info[1];
+
+        if ($tipo == 'image/jpeg' || $tipo == 'image/png' || $tipo == 'image/webp') {
+            if ($tipo == 'image/png') {
+                $destino = "imgn/" . $nom . ".png";
+            }
+            if ($tipo == 'image/jpeg') {
+                $destino = "imgn/" . $nom . ".jpg";
+            }
+            if ($tipo == 'image/webp') {
+                $destino = "imgn/" . $nom . ".webp";
+            }
+
+            if (move_uploaded_file($ruta, $destino)) {
+                $producto = ProductoQuery::create()->filterByIdProducto($_SESSION['idProd'])->findOne();
+                $producto->setNombreProducto($nombreProducto);
+                $producto->setModelo($modeloProducto);
+                $producto->setGenero($_POST['selectGen']);
+                $producto->setEstilo($_POST['selectEst']);
+                $producto->setColor($colorProducto);
+                $producto->setTalla($tallaProducto);
+                $producto->setPrecio($precioProducto);
+                $producto->setStockOriginal($stockProducto);
+                $producto->setStockActual($stockProducto);
+                $producto->setDescripcion($descripProducto);
+                $producto->setImagen($_SESSION['imgRuta']);
+                if ($producto->validate()) {
+                    $mensaje="<div class='alert alert-success' role='alert'>Se ha agregado el producto <a href='index.php' class='alert-link'>Ver en tienda</a></div>";
+                    $producto->save();
+                } else {
+                    $mensaje = "<div class='alert alert-danger text-center' style='margin-bottom:0;>
+            <div class='container-fluid'>
+            <div class='alert-icon'>
+            <i class='material-icons'>error_outline</i>
+            </div><b>ERROR EN LOS DATOS</div></div>";
+                }
+            }
+        } else {
+            $mensaje = "<div class='alert alert-danger text-center' style='margin-bottom:0;>
+            <div class='container-fluid'>
+            <div class='alert-icon'>
+            <i class='material-icons'>error_outline</i>
+            </div><b>FORMATO NO COMPATIBLE</b> SOLO USAR JPEG PNG O WEBP</div></div>";
+        }
+    } else {
+        if ($nom == "") {
+            $mensaje = "<div class='alert alert-danger text-center' style='margin-bottom:0;>
+            <div class='container-fluid'>
+            <div class='alert-icon'>
+            <i class='material-icons'>error_outline</i>
+            </div><b>PRODUCTO SIN NOMBRE DE FOTO</b> COLOCAR UN NOMBRE PARA LA FOTO DEL PRODUCTO </div></div>";
+        } else {
+            $mensaje = "<div class='alert alert-danger text-center' style='margin-bottom:0;>
+            <div class='container-fluid'>
+            <div class='alert-icon'>
+            <i class='material-icons'>error_outline</i>
+            </div><b>PRODUCTO SIN FOTO</b> COLOCAR UNA FOTO PARA EL PRODUCTO</div></div>";
+        }
+    }
+}
 echo @$mensaje;
 ?>
 
@@ -73,7 +150,7 @@ echo @$mensaje;
             <div class="col-xl-5 col-lg-2 col-md-3 d-flex flex-column me-lg-1">
                 <div class="card card-plain">
                     <div class="card-body">
-                        <form role="form" action="Fuser02.php?seccion=agregar_producto&accion=editar" method="post" enctype="multipart/form-data">
+                        <form role="form" action="Fuser02.php?seccion=agregar_producto&accion=actualizar" method="post" enctype="multipart/form-data">
                             <div class="input-group input-group-outline mb-3 <?php echo @$addfilled ?>">
                                 <label class="form-label">Nombre</label>
                                 <input type="text" class="form-control" name="txtNombreProd" value="<?php echo @$nombreProducto; ?>">

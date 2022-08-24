@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once "propelinit.php";
 $clave = $_GET['id'];
 $productos = ProductoQuery::create()->findByIdProducto($clave);
@@ -29,7 +30,7 @@ $productos = ProductoQuery::create()->findByIdProducto($clave);
                         <div class="row gx-4 gx-lg-5 align-items-center">
                             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 text-aling-left" src="<?php echo $producto->getImagen(); ?>"/></div>
                             <div class="col-md-6">
-                                <div class="small mb-1"><?php echo $producto->getModelo(); ?></div>
+                                <div class="small mb-1">SKU: BST-498</div>
                                 <h1 class="display-5 fw-bolder"><?php echo $producto->getNombreProducto(); ?></h1>
                                 <div class="fs-5 mb-5">
                                     <span class="text-decoration-line-through">$<?php echo $producto->getPrecio(); ?>.00</span>
@@ -37,20 +38,73 @@ $productos = ProductoQuery::create()->findByIdProducto($clave);
                                 </div>
                                 <p class="lead"><?php echo $producto->getDescripcion(); ?></p>
                                 <div class="d-flex">
-
-                                    <?php include_once "fav.php"; ?>
                                     <div class="d-flex">
-                                        <!-- <?php if ($producto->getPrecio() > 0) { ?>
-                                                      <a href="pcompra.php?id=<?php echo $producto->getIdProducto(); ?>" class="btn btn-info"> <img src="img/icon_car.png" width="20" height="20" style="vertical-align: middle"> Comprar ahora</a>
-                                        <?php } else { ?>
-                                                    <a href="#" class="btn btn-info"> <img src="img/icon_car.png" width="20" height="20" style="vertical-align: middle"> Comprar ahora</a>
-                                        <?php } ?>-->
-                                        <a href="comprarrr.php?id=<?php echo $producto->getIdProducto(); ?>"><br><br><br>
-                                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                                                <i class="bi-cart-fill me-1"></i>
-                                                <img src="img/icon_car.png" width="20" height="20" style="vertical-align: middle">
-                                                Comprar ahora
+                                        <?php if (@$_SESSION["nombres"] == "") { ?>
+                                        <a><br><br><br><button class="btn btn-outline-light" type="button" data-toggle="modal" data-target="#modal1">
+                                                    <img src="img/heart.png" width="35" height="30" style="vertical-align: middle">
                                             </button></a>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Hola Usuario!</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Porfavor inicia sesion para a&ntilde;adir a Favoritos.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } else { 
+                                            include_once "fav.php";
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="d-flex">
+                                        <?php if (@$_SESSION["nombres"] == "") { ?>
+                                        <a><br><br><br><button class="btn btn-outline-dark flex-shrink-0" type="button" data-toggle="modal" data-target="#modal">
+                                                    <i class="bi-cart-fill me-1"></i>
+                                                    <img src="img/icon_car.png" width="20" height="20" style="vertical-align: middle">
+                                                    Comprar ahora
+                                            </button></a>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Hola Usuario!</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Porfavor inicia secion para poder realizar una compra.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } else { ?>
+                                            <a href="comprarrr.php?id=<?php echo $producto->getIdProducto(); ?>"><br><br><br>
+                                                <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                                    <i class="bi-cart-fill me-1"></i>
+                                                    <img src="img/icon_car.png" width="20" height="20" style="vertical-align: middle">
+                                                    Comprar ahora
+                                                </button>
+                                            </a>
+                                        <?php }
+                                        ?>
                                     </div>
                                 </div>
                             </div>

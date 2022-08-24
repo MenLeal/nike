@@ -13,6 +13,7 @@ $click = 0;
 
 if($accion=="agregar")
 {
+    echo "agregado";
     $idu = $_POST["idu"];
     $idp = $_POST["idp"];
     $click = $_POST["click"];
@@ -29,6 +30,9 @@ if($accion=="agregar")
     {
         $fav->save();
         $mensaje="Se guardó";
+        $message = "siu";
+        echo "<script type='text/javascript'>alert('$message');</script>";
+        #sleep(3);
         header("Location: comprar.php?id=".$idp.'');
     }
     else{
@@ -84,7 +88,7 @@ if($accion=="agregar")
 
     <input type="hidden" value="1" id="IsClicked" name="click"><br>
 
-    <button type="submit" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModal">
+    <button type="submit" class="btn btn-outline-light">
         <img src="img/heart.png" width="35" height="30" style="vertical-align: middle">
     </button>
 </form>
